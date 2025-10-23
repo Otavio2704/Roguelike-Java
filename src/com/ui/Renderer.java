@@ -8,10 +8,10 @@ import java.util.List;
 
 public class Renderer {
 
-    public void render(Player player, List<Entity> enemies, List<Item> items, int level) {
+    public void render(Player player, List<Entity> enemies, List<Item> items, boolean[][] walls, int level) {
         clearScreen();
         drawHeader(player, level);
-        drawMap(player, enemies, items);
+        drawMap(player, enemies, items, walls);
         drawFooter();
     }
 
@@ -19,17 +19,20 @@ public class Renderer {
         System.out.println("═══════════════════════════════════════════");
         System.out.println("  Roguelike - Nível: " + level + 
                          " | Ouro: " + player.getGold() + 
-                         " | HP: " + player.getHp() + "/" + player.getMaxHp());
+                         " | HP: " + player.getHp() + "/" + player.getMaxHp() +
+                         " | ATK: " + player.getAtk());
         System.out.println("═══════════════════════════════════════════");
     }
 
-    private void drawMap(Player player, List<Entity> enemies, List<Item> items) {
+    private void drawMap(Player player, List<Entity> enemies, List<Item> items, boolean[][] walls) {
         for (int y = 0; y < GameConstants.HEIGHT; y++) {
             System.out.print("║");
             for (int x = 0; x < GameConstants.WIDTH; x++) {
                 char c = ' ';
 
-                if (player.getX() == x && player.getY() == y) {
+                if (walls[x][y]) {
+                    c = '#';
+                } else if (player.getX() == x && player.getY() == y) {
                     c = player.getSymbol();
                 } else {
                     boolean found = false;
