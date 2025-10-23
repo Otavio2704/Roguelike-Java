@@ -84,8 +84,8 @@ public class Renderer {
     }
 
     public void showGameOver(Player player, int level) {
-        System.out.println("\n☠ GAME OVER! Você foi derrotado no nível " + level + "!");
-        System.out.println("Ouro total: " + player.getGold());
+        UI ui = new UI(null);
+        ui.showGameOverScreen(level, player.getGold());
     }
 
     public void showLevelUp(int level) {
