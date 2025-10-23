@@ -1,0 +1,27 @@
+package com.roguelike.entity;
+
+import com.roguelike.game.GameConstants;
+
+public class Enemy extends Entity {
+
+    public Enemy(int x, int y, int hp, int atk) {
+        super(x, y, hp, atk, GameConstants.ENEMY_SYMBOL, GameConstants.ENEMY_NAME);
+    }
+
+    public static Enemy createGoblin(int x, int y, int level) {
+        int hp = GameConstants.ENEMY_BASE_HP + level * 2;
+        int atk = GameConstants.ENEMY_BASE_ATK + level;
+        return new Enemy(x, y, hp, atk);
+    }
+
+    public int distanceTo(Entity other) {
+        return Math.abs(this.x - other.getX()) + Math.abs(this.y - other.getY());
+    }
+
+    public void moveTowards(Entity target) {
+        int dx = Integer.compare(target.getX(), this.x);
+        int dy = Integer.compare(target.getY(), this.y);
+        this.x += dx;
+        this.y += dy;
+    }
+}
