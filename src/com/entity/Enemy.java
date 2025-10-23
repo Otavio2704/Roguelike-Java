@@ -21,7 +21,12 @@ public class Enemy extends Entity {
     public void moveTowards(Entity target) {
         int dx = Integer.compare(target.getX(), this.x);
         int dy = Integer.compare(target.getY(), this.y);
-        this.x += dx;
-        this.y += dy;
+        
+        // Move preferencialmente na direção de maior distância
+        if (Math.abs(target.getX() - this.x) > Math.abs(target.getY() - this.y)) {
+            this.x += dx;
+        } else {
+            this.y += dy;
+        }
     }
 }
