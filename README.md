@@ -25,7 +25,7 @@ Sobreviva aos níveis derrotando todos os inimigos. A cada nível completado, a 
 - `S` - Mover para baixo
 - `A` - Mover para esquerda
 - `D` - Mover para direita
-- `ESPAÇO` - Atacar inimigo adjacente
+- `ESPAÇO` ou `attack` - Atacar inimigo adjacente
 - `I` - Mostrar informações do jogador
 - `Q` - Sair do jogo
 
@@ -91,7 +91,7 @@ src/com/roguelike/
 ## 🎮 Mecânicas do Jogo
 
 ### Combate
-- O jogador ataca inimigos adjacentes pressionando `ESPAÇO`
+- O jogador ataca inimigos adjacentes pressionando `ESPAÇO` ou escrevendo `attack`
 - Cada ataque causa dano baseado no ATK do jogador + variação aleatória
 - Inimigos atacam automaticamente quando estão adjacentes ao jogador
 - Inimigos perseguem o jogador quando estão dentro do alcance
