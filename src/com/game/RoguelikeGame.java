@@ -271,7 +271,7 @@ public class RoguelikeGame {
                 case "s" -> movePlayer(0, 1);
                 case "a" -> movePlayer(-1, 0);
                 case "d" -> movePlayer(1, 0);
-                case " " -> attack();
+                case "attack" -> attack();
                 case "i" -> {
                     renderer.showInfo(player, enemies);
                     inputHandler.sleep(2000);
