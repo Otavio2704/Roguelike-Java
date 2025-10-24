@@ -17,12 +17,12 @@ public class Main {
             switch (choice) {
                 case "1" -> {
                     ui.showWelcomeMessage();
-                    RoguelikeGame game = new RoguelikeGame();
+                    RoguelikeGame game = new RoguelikeGame(inputHandler);
                     game.play();
                 }
                 case "2" -> ui.showInstructions();
                 case "3" -> {
-                    System.out.println("\nAté logo! 👋");
+                    System.out.println("\nAté logo! :)");
                     running = false;
                 }
                 default -> System.out.println("Opção inválida! Tente novamente.");
