@@ -25,7 +25,7 @@ public class RoguelikeGame {
     private Renderer renderer;
     private InputHandler inputHandler;
 
-    public RoguelikeGame() {
+    public RoguelikeGame(InputHandler inputHandler) {
         this.player = new Player();
         this.enemies = new ArrayList<>();
         this.items = new ArrayList<>();
@@ -33,7 +33,7 @@ public class RoguelikeGame {
         this.rand = new Random();
         this.level = GameConstants.INITIAL_LEVEL;
         this.renderer = new Renderer();
-        this.inputHandler = new InputHandler();
+        this.inputHandler = inputHandler;
         generateLevel();
     }
 
@@ -192,7 +192,7 @@ public class RoguelikeGame {
                     }
                     attackedEnemy = true;
                     inputHandler.sleep(1000);
-                    return; // Ataca apenas um inimigo por turno
+                    return;
                 }
             }
         }
@@ -271,20 +271,17 @@ public class RoguelikeGame {
                 case "s" -> movePlayer(0, 1);
                 case "a" -> movePlayer(-1, 0);
                 case "d" -> movePlayer(1, 0);
-                case "attack" -> attack();
+                case "attack", "" -> attack();
                 case "i" -> {
                     renderer.showInfo(player, enemies);
                     inputHandler.sleep(2000);
                 }
                 case "q" -> {
-                    System.out.println("Até logo!");
-                    inputHandler.close();
+                    System.out.println("\nAté logo!");
                     return;
                 }
                 default -> System.out.println("Comando inválido!");
             }
         }
-
-        inputHandler.close();
     }
 }
