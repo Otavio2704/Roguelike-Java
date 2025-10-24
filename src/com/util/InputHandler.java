@@ -11,7 +11,14 @@ public class InputHandler {
 
     public String getCommand() {
         System.out.print("Comando: ");
-        return scanner.nextLine().toLowerCase().trim();
+        String input = scanner.nextLine().toLowerCase();
+        
+        // Se for só espaço, retorna "attack" para facilitar
+        if (input.trim().isEmpty() && input.length() > 0) {
+            return "attack";
+        }
+        
+        return input.trim();
     }
 
     public void sleep(long milliseconds) {
