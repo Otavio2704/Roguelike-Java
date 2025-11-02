@@ -7,6 +7,15 @@ import com.roguelike.item.Item;
 import java.util.List;
 
 public class Renderer {
+    private UI ui;
+
+    public Renderer() {
+        this.ui = null; // Será injetado quando necessário
+    }
+
+    public Renderer(UI ui) {
+        this.ui = ui;
+    }
 
     public void render(Player player, List<Entity> enemies, List<Item> items, boolean[][] walls, int level) {
         clearScreen();
@@ -73,21 +82,33 @@ public class Renderer {
         System.out.println("\n╔══════════════════════════════════════╗");
         System.out.println("║         INFORMAÇÕES DO JOGADOR       ║");
         System.out.println("╠══════════════════════════════════════╣");
-        System.out.println("║ HP: " + player.getHp() + "/" + player.getMaxHp() + 
-                         (player.getHp() < 10 ? "                          ║" : "                         ║"));
-        System.out.println("║ ATK: " + player.getAtk() + 
-                         (player.getAtk() < 10 ? "                             ║" : "                            ║"));
-        System.out.println("║ Ouro: " + player.getGold() + 
-                         (player.getGold() < 10 ? "                           ║" : 
-                          (player.getGold() < 100 ? "                          ║" : "                         ║")));
+        
+        String hpLine = "║ HP: " + player.getHp() + "/" + player.getMaxHp();
+        System.out.println(padLine(hpLine, 40));
+        
+        String atkLine = "║ ATK: " + player.getAtk();
+        System.out.println(padLine(atkLine, 40));
+        
+        String goldLine = "║ Ouro: " + player.getGold();
+        System.out.println(padLine(goldLine, 40));
+        
         long aliveEnemies = enemies.stream().filter(Entity::isAlive).count();
-        System.out.println("║ Inimigos vivos: " + aliveEnemies + 
-                         (aliveEnemies < 10 ? "                   ║" : "                  ║"));
+        String enemiesLine = "║ Inimigos vivos: " + aliveEnemies;
+        System.out.println(padLine(enemiesLine, 40));
+        
         System.out.println("╚══════════════════════════════════════╝");
     }
 
+    private String padLine(String line, int totalWidth) {
+        int currentLength = line.length();
+        int spacesNeeded = totalWidth - currentLength - 1; // -1 para o ║ final
+        return line + " ".repeat(Math.max(0, spacesNeeded)) + "║";
+    }
+
     public void showGameOver(Player player, int level) {
-        UI ui = new UI(null);
+        if (ui == null) {
+            ui = new UI(null);
+        }
         ui.showGameOverScreen(level, player.getGold());
     }
 
