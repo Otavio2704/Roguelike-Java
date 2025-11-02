@@ -24,6 +24,7 @@ public class RoguelikeGame {
     private int level;
     private Renderer renderer;
     private InputHandler inputHandler;
+    private boolean levelCleared;
 
     public RoguelikeGame(InputHandler inputHandler) {
         this.player = new Player();
@@ -34,21 +35,31 @@ public class RoguelikeGame {
         this.level = GameConstants.INITIAL_LEVEL;
         this.renderer = new Renderer();
         this.inputHandler = inputHandler;
+        this.levelCleared = false;
         generateLevel();
     }
 
     private void generateLevel() {
         enemies.clear();
         items.clear();
+        levelCleared = false;
         
-        // Limpa paredes
+        clearWalls();
+        generateBorderWalls();
+        generateInnerWalls();
+        spawnEnemies();
+        spawnItems();
+    }
+
+    private void clearWalls() {
         for (int x = 0; x < GameConstants.WIDTH; x++) {
             for (int y = 0; y < GameConstants.HEIGHT; y++) {
                 walls[x][y] = false;
             }
         }
+    }
 
-        // Gera paredes nas bordas
+    private void generateBorderWalls() {
         for (int x = 0; x < GameConstants.WIDTH; x++) {
             walls[x][0] = true;
             walls[x][GameConstants.HEIGHT - 1] = true;
@@ -57,8 +68,9 @@ public class RoguelikeGame {
             walls[0][y] = true;
             walls[GameConstants.WIDTH - 1][y] = true;
         }
+    }
 
-        // Gera algumas paredes internas aleatórias
+    private void generateInnerWalls() {
         int wallCount = 5 + level;
         for (int i = 0; i < wallCount; i++) {
             int x = rand.nextInt(GameConstants.WIDTH - 4) + 2;
@@ -67,64 +79,79 @@ public class RoguelikeGame {
                 walls[x][y] = true;
             }
         }
+    }
 
-        // Gera inimigos (balanceado)
+    private void spawnEnemies() {
         int enemyCount = Math.min(2 + level, 8);
         for (int i = 0; i < enemyCount; i++) {
-            int attempts = 0;
-            while (attempts < 50) {
+            spawnEntityAtRandomPosition(() -> {
                 int x = rand.nextInt(GameConstants.WIDTH - 2) + 1;
                 int y = rand.nextInt(GameConstants.HEIGHT - 2) + 1;
                 if (!isOccupied(x, y)) {
                     enemies.add(Enemy.createGoblin(x, y, level));
-                    break;
+                    return true;
                 }
-                attempts++;
-            }
-        }
-
-        // Gera itens
-        int itemCount = 3 + level;
-        for (int i = 0; i < itemCount; i++) {
-            int attempts = 0;
-            while (attempts < 50) {
-                int x = rand.nextInt(GameConstants.WIDTH - 2) + 1;
-                int y = rand.nextInt(GameConstants.HEIGHT - 2) + 1;
-                if (!isOccupied(x, y)) {
-                    int idx = rand.nextInt(3);
-                    Item item = switch (idx) {
-                        case 0 -> new Potion(x, y);
-                        case 1 -> new Gold(x, y);
-                        case 2 -> new Weapon(x, y);
-                        default -> new Potion(x, y);
-                    };
-                    items.add(item);
-                    break;
-                }
-                attempts++;
-            }
+                return false;
+            });
         }
     }
 
+    private void spawnItems() {
+        int itemCount = 3 + level;
+        for (int i = 0; i < itemCount; i++) {
+            spawnEntityAtRandomPosition(() -> {
+                int x = rand.nextInt(GameConstants.WIDTH - 2) + 1;
+                int y = rand.nextInt(GameConstants.HEIGHT - 2) + 1;
+                if (!isOccupied(x, y)) {
+                    Item item = createRandomItem(x, y);
+                    items.add(item);
+                    return true;
+                }
+                return false;
+            });
+        }
+    }
+
+    private Item createRandomItem(int x, int y) {
+        int idx = rand.nextInt(3);
+        return switch (idx) {
+            case 0 -> new Potion(x, y);
+            case 1 -> new Gold(x, y);
+            case 2 -> new Weapon(x, y);
+            default -> new Potion(x, y);
+        };
+    }
+
+    private void spawnEntityAtRandomPosition(SpawnAttempt spawner) {
+        int attempts = 0;
+        while (attempts < 50) {
+            if (spawner.attempt()) {
+                break;
+            }
+            attempts++;
+        }
+    }
+
+    @FunctionalInterface
+    private interface SpawnAttempt {
+        boolean attempt();
+    }
+
     private boolean isOccupied(int x, int y) {
-        // Verifica se é a posição do player
         if (x == player.getX() && y == player.getY()) {
             return true;
         }
         
-        // Verifica paredes
         if (walls[x][y]) {
             return true;
         }
         
-        // Verifica inimigos
         for (Entity e : enemies) {
             if (e.getX() == x && e.getY() == y) {
                 return true;
             }
         }
         
-        // Verifica itens
         for (Item item : items) {
             if (item.getX() == x && item.getY() == y) {
                 return true;
@@ -142,14 +169,12 @@ public class RoguelikeGame {
             return;
         }
 
-        // Verifica colisão com paredes
         if (walls[nx][ny]) {
             System.out.println("\n✗ Você bateu na parede!");
             inputHandler.sleep(300);
             return;
         }
 
-        // Verifica colisão com inimigos
         for (Entity e : enemies) {
             if (e.isAlive() && e.getX() == nx && e.getY() == ny) {
                 System.out.println("\n✗ Há um inimigo no caminho!");
@@ -189,6 +214,7 @@ public class RoguelikeGame {
                     if (!e.isAlive()) {
                         System.out.println("💀 " + e.getName() + " foi derrotado!");
                         player.addGold(GameConstants.GOLD_REWARD);
+                        checkLevelCompletion();
                     }
                     attackedEnemy = true;
                     inputHandler.sleep(1000);
@@ -200,6 +226,12 @@ public class RoguelikeGame {
         if (!attackedEnemy) {
             System.out.println("\n✗ Nenhum inimigo perto!");
             inputHandler.sleep(500);
+        }
+    }
+
+    private void checkLevelCompletion() {
+        if (enemies.stream().allMatch(e -> !e.isAlive())) {
+            levelCleared = true;
         }
     }
 
@@ -216,15 +248,15 @@ public class RoguelikeGame {
                 System.out.println("\n⚔ " + enemy.getName() + " atacou você por " + dmg + " dano! Seu HP: " + player.getHp() + "/" + player.getMaxHp());
                 inputHandler.sleep(1000);
             } else if (dist > GameConstants.ENEMY_ATTACK_RANGE && dist <= GameConstants.ENEMY_PURSUIT_RANGE) {
-                // Move o inimigo, mas verifica se não há parede
-                int oldX = enemy.getX();
-                int oldY = enemy.getY();
-                enemy.moveTowards(player);
+                // Calcula nova posição sem modificar o inimigo ainda
+                int[] newPos = enemy.getNextPositionTowards(player);
+                int newX = newPos[0];
+                int newY = newPos[1];
                 
-                // Se bateu em parede ou outro inimigo, volta
-                if (walls[enemy.getX()][enemy.getY()] || isEnemyAt(enemy.getX(), enemy.getY(), enemy)) {
-                    enemy.setX(oldX);
-                    enemy.setY(oldY);
+                // Só move se a posição é válida
+                if (!walls[newX][newY] && !isEnemyAt(newX, newY, enemy)) {
+                    enemy.setX(newX);
+                    enemy.setY(newY);
                 }
             }
         }
@@ -244,8 +276,8 @@ public class RoguelikeGame {
         return false;
     }
 
-    private void nextLevel() {
-        if (enemies.stream().allMatch(e -> !e.isAlive())) {
+    private void advanceToNextLevel() {
+        if (levelCleared) {
             level++;
             player.resetPosition();
             player.resetHP();
@@ -261,7 +293,7 @@ public class RoguelikeGame {
 
     public void play() {
         while (player.isAlive()) {
-            nextLevel();
+            advanceToNextLevel();
             renderer.render(player, enemies, items, walls, level);
 
             String input = inputHandler.getCommand();
