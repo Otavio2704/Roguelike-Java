@@ -13,8 +13,8 @@ public class InputHandler {
         System.out.print("Comando: ");
         String input = scanner.nextLine().toLowerCase();
         
-        // Se for só espaço, retorna "attack" para facilitar
-        if (input.trim().isEmpty() && input.length() > 0) {
+        // Corrigido: detecta quando usuário pressiona apenas espaço
+        if (input.isEmpty() || input.equals(" ")) {
             return "attack";
         }
         
