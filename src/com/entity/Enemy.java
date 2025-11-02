@@ -18,15 +18,21 @@ public class Enemy extends Entity {
         return Math.abs(this.x - other.getX()) + Math.abs(this.y - other.getY());
     }
 
-    public void moveTowards(Entity target) {
+    // Retorna nova posição sem modificar o estado
+    public int[] getNextPositionTowards(Entity target) {
         int dx = Integer.compare(target.getX(), this.x);
         int dy = Integer.compare(target.getY(), this.y);
         
+        int newX = this.x;
+        int newY = this.y;
+        
         // Move preferencialmente na direção de maior distância
         if (Math.abs(target.getX() - this.x) > Math.abs(target.getY() - this.y)) {
-            this.x += dx;
+            newX += dx;
         } else {
-            this.y += dy;
+            newY += dy;
         }
+        
+        return new int[]{newX, newY};
     }
 }
