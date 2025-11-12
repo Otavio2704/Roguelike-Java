@@ -81,6 +81,9 @@ src/com/roguelike/
 ├── game/
 │   ├── RoguelikeGame.java # Lógica principal do jogo
 │   └── GameConstants.java # Constantes do jogo
+│   └── CombatManager.java # Lógica de combate
+│   └── MapGenerator.java  # Gerador de mapas
+│   └── PlayerController.java # Lógica do jogador
 ├── ui/
 │   ├── UI.java            # Interface de menus
 │   └── Renderer.java      # Renderização do mapa
