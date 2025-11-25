@@ -67,7 +67,7 @@ Você também pode abrir o projeto em qualquer IDE Java (IntelliJ IDEA, Eclipse,
 ## 🏗️ Estrutura do Projeto
 
 ```
-src/com/roguelike/
+Roguelike-Java\src\com
 ├── Main.java              # Ponto de entrada do jogo
 ├── entity/
 │   ├── Entity.java        # Classe base para entidades
