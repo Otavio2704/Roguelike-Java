@@ -28,4 +28,8 @@ public class Player extends Entity {
     public void resetHP() {
         this.hp = maxHp;
     }
+
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+    }
 }
