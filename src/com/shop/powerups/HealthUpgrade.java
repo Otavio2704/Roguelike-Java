@@ -7,7 +7,7 @@ public class HealthUpgrade extends PowerUp {
     private static final String NAME = "Aumento de HP Máximo";
     private static final String DESCRIPTION = "Aumenta seu HP máximo em 10 pontos";
     private static final int PRICE = 50;
-    private static final char SYMBOL = '=>';
+    private static final char SYMBOL = '=';
     private static final int HP_BONUS = 10;
 
     public HealthUpgrade() {
