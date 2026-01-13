@@ -11,6 +11,7 @@ Este é um roguelike minimalista que captura a essência dos jogos do gênero: m
 - 🗺️ **Geração procedural de níveis** - Cada partida é única
 - ⚔️ **Sistema de combate baseado em turnos** - Pense antes de agir
 - 🎒 **Sistema de itens** - Poções, ouro e armas para coletar
+- 🏪 **Loja de power-ups** - Gaste suas moedas em melhorias permanentes a cada 4 níveis
 - 👾 **IA inimiga** - Goblins que perseguem e atacam o jogador
 - 📈 **Progressão de dificuldade** - Cada nível fica mais desafiador
 - 🎨 **Interface ASCII** - Visual clássico de roguelike
@@ -18,7 +19,7 @@ Este é um roguelike minimalista que captura a essência dos jogos do gênero: m
 ## 🎯 Como Jogar
 
 ### Objetivo
-Sobreviva aos níveis derrotando todos os inimigos. A cada nível completado, a dificuldade aumenta com mais inimigos e desafios!
+Sobreviva aos níveis derrotando todos os inimigos. A cada nível completado, a dificuldade aumenta com mais inimigos e desafios! A cada 4 níveis, uma loja aparecerá para você gastar suas moedas em power-ups.
 
 ### Controles
 - `W` - Mover para cima
@@ -78,11 +79,19 @@ Roguelike-Java\src\com
 │   ├── Potion.java        # Poção de vida
 │   ├── Gold.java          # Ouro
 │   └── Weapon.java        # Arma (Adaga)
+├── shop/
+│   ├── Shop.java          # Gerenciador da loja
+│   ├── ShopUI.java        # Interface visual da loja
+│   ├── PowerUp.java       # Classe base para power-ups
+│   └── powerups/
+│       ├── HealthPotion.java    # Poção grande
+│       ├── HealthUpgrade.java   # Aumento de HP máximo
+│       └── AttackUpgrade.java   # Aumento de ATK
 ├── game/
 │   ├── RoguelikeGame.java # Lógica principal do jogo
-│   └── GameConstants.java # Constantes do jogo
-│   └── CombatManager.java # Lógica de combate
-│   └── MapGenerator.java  # Gerador de mapas
+│   ├── GameConstants.java # Constantes do jogo
+│   ├── CombatManager.java # Lógica de combate
+│   ├── MapGenerator.java  # Gerador de mapas
 │   └── PlayerController.java # Lógica do jogador
 ├── ui/
 │   ├── UI.java            # Interface de menus
@@ -111,11 +120,20 @@ Roguelike-Java\src\com
 - **Ouro ($)**: Adiciona 25 moedas ao seu total
 - **Adaga (†)**: Aumenta permanentemente seu ATK em 2
 
+### Loja de Power-ups 🏪
+A cada 4 níveis completados (níveis 4, 8, 12...), uma loja aparece com power-ups especiais:
+
+- **🧪 Poção Grande** (30 ouro): Restaura 20 pontos de vida imediatamente
+- **💚 Aumento de HP Máximo** (50 ouro): Aumenta seu HP máximo permanentemente em 10 pontos
+- **⚔️ Aumento de Ataque** (75 ouro): Aumenta seu ATK permanentemente em 3 pontos
+
+Gerencie bem suas moedas para comprar os upgrades que mais combinam com seu estilo de jogo!
+
 ## 🛠️ Tecnologias Utilizadas
 
 - Java 11+
 - Programação Orientada a Objetos
-- Padrões de Design (Herança, Polimorfismo)
+- Padrões de Design (Herança, Polimorfismo, Injeção de Dependências)
 - Manipulação de terminal ANSI
 
 ## 📝 Licença
