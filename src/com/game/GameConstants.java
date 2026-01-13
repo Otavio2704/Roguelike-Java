@@ -35,4 +35,19 @@ public class GameConstants {
     public static final int ATTACK_RANGE = 1;
     public static final int ENEMY_PURSUIT_RANGE = 5;
     public static final int ENEMY_ATTACK_RANGE = 1;
+
+    // ===== NOVAS CONSTANTES DA LOJA =====
+    
+    // Intervalo da loja
+    public static final int SHOP_INTERVAL = 4;
+    
+    // Preços dos power-ups
+    public static final int HEALTH_UPGRADE_PRICE = 50;
+    public static final int ATTACK_UPGRADE_PRICE = 75;
+    public static final int HEALTH_POTION_PRICE = 30;
+    
+    // Valores dos power-ups
+    public static final int HEALTH_UPGRADE_BONUS = 10;
+    public static final int ATTACK_UPGRADE_BONUS = 3;
+    public static final int HEALTH_POTION_HEAL = 20;
 }
