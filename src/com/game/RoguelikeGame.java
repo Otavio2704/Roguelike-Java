@@ -3,6 +3,7 @@ package com.roguelike.game;
 import com.roguelike.entity.Entity;
 import com.roguelike.entity.Player;
 import com.roguelike.item.Item;
+import com.roguelike.shop.Shop;
 import com.roguelike.ui.Renderer;
 import com.roguelike.util.InputHandler;
 
@@ -20,11 +21,12 @@ public class RoguelikeGame {
     private Renderer renderer;
     private InputHandler inputHandler;
     private boolean levelCleared;
+
     
-    // Componentes refatorados
     private MapGenerator mapGenerator;
     private CombatManager combatManager;
     private PlayerController playerController;
+    private Shop shop;
 
     public RoguelikeGame(InputHandler inputHandler) {
         this.player = new Player();
@@ -41,6 +43,7 @@ public class RoguelikeGame {
         this.mapGenerator = new MapGenerator(walls, rand, player);
         this.combatManager = new CombatManager(player, enemies, walls, rand, inputHandler);
         this.playerController = new PlayerController(player, enemies, items, walls, inputHandler);
+        this.shop = new Shop(inputHandler); // NOVA INICIALIZAÇÃO
         
         generateLevel();
     }
@@ -68,15 +71,29 @@ public class RoguelikeGame {
         }
     }
 
+    
     private void advanceToNextLevel() {
         if (levelCleared) {
             level++;
+            
+            // Verifica se deve abrir a loja
+            if (level % GameConstants.SHOP_INTERVAL == 0) {
+                renderer.showShopNotification(level);
+                inputHandler.sleep(2000);
+                openShop();
+            }
+            
             player.resetPosition();
             player.resetHP();
             generateLevel();
             renderer.showLevelUp(level);
             inputHandler.sleep(2000);
         }
+    }
+
+    
+    private void openShop() {
+        shop.openShop(player);
     }
 
     public boolean[][] getWalls() {
