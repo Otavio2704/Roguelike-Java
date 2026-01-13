@@ -7,7 +7,7 @@ public class HealthPotion extends PowerUp {
     private static final String NAME = "Poção Grande";
     private static final String DESCRIPTION = "Restaura 20 pontos de vida imediatamente";
     private static final int PRICE = 30;
-    private static final char SYMBOL = '(^)';
+    private static final char SYMBOL = '^';
     private static final int HEAL_AMOUNT = 20;
 
     public HealthPotion() {
