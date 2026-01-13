@@ -10,7 +10,7 @@ public class Renderer {
     private UI ui;
 
     public Renderer() {
-        this.ui = null; // Será injetado quando necessário
+        this.ui = null;
     }
 
     public Renderer(UI ui) {
@@ -101,7 +101,7 @@ public class Renderer {
 
     private String padLine(String line, int totalWidth) {
         int currentLength = line.length();
-        int spacesNeeded = totalWidth - currentLength - 1; // -1 para o ║ final
+        int spacesNeeded = totalWidth - currentLength - 1;
         return line + " ".repeat(Math.max(0, spacesNeeded)) + "║";
     }
 
@@ -114,5 +114,17 @@ public class Renderer {
 
     public void showLevelUp(int level) {
         System.out.println("\n🏆 Próximo nível! Nível: " + level);
+    }
+
+    // ===== NOVO MÉTODO =====
+    public void showShopNotification(int level) {
+        clearScreen();
+        System.out.println("\n╔═══════════════════════════════════════════════════════╗");
+        System.out.println("║                                                       ║");
+        System.out.println("║           * LOJA DISPONÍVEL NO NÍVEL " + String.format("%-2d", level) + "! *          ║");
+        System.out.println("║                                                       ║");
+        System.out.println("║         Prepare-se para gastar suas moedas!           ║");
+        System.out.println("║                                                       ║");
+        System.out.println("╚═══════════════════════════════════════════════════════╝");
     }
 }
