@@ -13,7 +13,7 @@ public class UI {
         clearScreen();
         System.out.println("╔═══════════════════════════════════════╗");
         System.out.println("║                                       ║");
-        System.out.println("║        🎮 ROGUELIKE GAME 🎮          ║");
+        System.out.println("║         🎮 ROGUELIKE GAME 🎮          ║");
         System.out.println("║                                       ║");
         System.out.println("╠═══════════════════════════════════════╣");
         System.out.println("║  [1] Novo Jogo                        ║");
@@ -121,7 +121,11 @@ public class UI {
     }
 
     public void clearScreen() {
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
+        try {
+            new ProcessBuilder("clear").inheritIO().start().waitFor();
+        } catch (Exception e) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        }
     }
 }
