@@ -57,11 +57,13 @@ public class RoguelikeGame {
         if (playerController.movePlayer(dx, dy)) {
             combatManager.enemyTurn();
             checkGameOver();
+            renderer.render(player, enemies, items, walls, level);
         }
     }
 
     private void attack() {
         combatManager.playerAttack(() -> levelCleared = true);
+        renderer.render(player, enemies, items, walls, level);
     }
 
     private void checkGameOver() {
